@@ -1,0 +1,28 @@
+[
+{
+  "model": "students.student",
+  "pk": 1,
+  "fields": {
+    "first_name": "jann",
+    "last_name": "susus",
+    "age": 21,
+    "course": "BSIT",
+    "year_level": "2nd Year",
+    "profile_picture": "profile_pics/21421.jpg",
+    "created_at": "2026-04-09T13:45:55.997Z"
+  }
+},
+{
+  "model": "students.student",
+  "pk": 2,
+  "fields": {
+    "first_name": "John",
+    "last_name": "Doe",
+    "age": 21,
+    "course": "BSTM",
+    "year_level": "2nd Year",
+    "profile_picture": "profile_pics/777.jpg",
+    "created_at": "2026-04-09T14:08:22.678Z"
+  }
+}
+]

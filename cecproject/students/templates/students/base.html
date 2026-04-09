@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}CEC Student Profile System{% endblock %}</title>
+  <link rel="icon" type="image/png" href="{% static 'img/images.png' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2"/>
+  
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="{% url 'student_list' %}" class="navbar-brand">
+        <img src="{% static 'img/images.png' %}" alt="CEC logo" class="brand-logo" width="34" height="34" />
+        <div class="brand-text">
+          <span class="brand-name">Student Profile</span>
+          <span class="brand-sub">CEBU EASTERN COLLEGE</span>
+        </div>
+      </a>
+      <div class="navbar-links">
+        <a href="{% url 'student_list' %}"
+           class="nav-link {% if request.resolver_match.url_name == 'student_list' %}active{% endif %}">
+          &#127968; Home
+        </a>
+        <a href="{% url 'student_add' %}"
+           class="nav-link add-btn {% if request.resolver_match.url_name == 'student_add' %}active{% endif %}">
+          + Add Student
+        </a>
+        <div class="nav-divider"></div>
+        <span class="nav-user">&#128100; {{ request.user.username }}</span>
+        <form method="post" action="{% url 'logout' %}" style="display:inline;" id="logoutForm">
+          {% csrf_token %}
+          <button type="submit" class="btn-logout" id="logoutButton">Log Out</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  {% if messages %}
+    <div style="max-width:1100px;margin:0 auto;padding:18px 24px 0;">
+      <ul class="messages-list">
+        {% for message in messages %}
+          <li class="message-item {{ message.tags }}">
+            {% if message.tags == 'success' %}&#9989;{% else %}&#10060;{% endif %}
+            {{ message }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  {% block content %}{% endblock %}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var logoutForm = document.getElementById('logoutForm');
+      if (logoutForm) {
+        logoutForm.addEventListener('submit', function(event) {
+          if (!window.confirm('u want to log out')) {
+            event.preventDefault();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

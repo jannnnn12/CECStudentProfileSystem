@@ -1,0 +1,13 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CEC logo">
+  <defs>
+    <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2F69D4"/>
+      <stop offset="100%" stop-color="#6C9BF1"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="28" fill="url(#logo-gradient)"/>
+  <path d="M34 36h18v48H34zM68 36h18v48H68z" fill="#FFFFFF"/>
+  <path d="M44 70h32l-6 10H50z" fill="#FFFFFF" opacity="0.85"/>
+  <circle cx="60" cy="36" r="10" fill="#FFFFFF" opacity="0.95"/>
+  <text x="60" y="108" font-family="Outfit, sans-serif" font-size="14" fill="#FFFFFF" text-anchor="middle">CEC</text>
+</svg>

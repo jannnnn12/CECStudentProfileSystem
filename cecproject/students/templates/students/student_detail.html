@@ -1,0 +1,82 @@
+{% extends "students/base.html" %}
+
+{% block title %}{{ student.full_name }} — CEC Student Profile{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+
+  <!-- Back link -->
+  <div style="margin-bottom:20px;">
+    <a href="{% url 'student_list' %}" class="btn btn-outline">← Back to Dashboard</a>
+  </div>
+
+  <div class="detail-wrap">
+    <div class="detail-card">
+
+      <!-- Hero Banner -->
+      <div class="detail-hero">
+        {% if student.profile_picture %}
+          <img src="{{ student.profile_picture.url }}" alt="{{ student.full_name }}" class="detail-avatar"/>
+        {% else %}
+          <div class="detail-avatar-placeholder">{{ student.get_initials }}</div>
+        {% endif %}
+        <div class="detail-hero-info">
+          <div class="detail-hero-name">{{ student.full_name }}</div>
+          <div class="detail-hero-course">{{ student.get_course_display }}</div>
+        </div>
+      </div>
+
+      <!-- Fields Grid -->
+      <div class="detail-body">
+        <div class="detail-grid">
+
+          <div class="detail-field">
+            <div class="detail-field-label">First Name</div>
+            <div class="detail-field-value">{{ student.first_name }}</div>
+          </div>
+
+          <div class="detail-field">
+            <div class="detail-field-label">Last Name</div>
+            <div class="detail-field-value">{{ student.last_name }}</div>
+          </div>
+
+          <div class="detail-field">
+            <div class="detail-field-label">Age</div>
+            <div class="detail-field-value">{{ student.age }} years old</div>
+          </div>
+
+          <div class="detail-field">
+            <div class="detail-field-label">Year Level</div>
+            <div class="detail-field-value">{{ student.year_level }}</div>
+          </div>
+
+          <div class="detail-field" style="grid-column: 1 / -1;">
+            <div class="detail-field-label">Course</div>
+            <div class="detail-field-value">{{ student.get_course_display }}</div>
+          </div>
+
+          <div class="detail-field">
+            <div class="detail-field-label">Date Added</div>
+            <div class="detail-field-value">{{ student.created_at|date:"F d, Y" }}</div>
+          </div>
+
+          <div class="detail-field">
+            <div class="detail-field-label">Student ID</div>
+            <div class="detail-field-value">#{{ student.pk|stringformat:"04d" }}</div>
+          </div>
+
+        </div>
+
+        <!-- Actions -->
+        <div class="detail-actions">
+          <a href="{% url 'student_edit' student.pk %}" class="btn btn-gold">✎ Edit Profile</a>
+          <a href="{% url 'student_delete' student.pk %}" class="btn btn-danger">✕ Delete</a>
+          <a href="{% url 'student_list' %}" class="btn btn-outline">← All Students</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

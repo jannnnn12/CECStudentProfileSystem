@@ -1,0 +1,37 @@
+{% extends "students/base.html" %}
+
+{% block title %}Delete Student — CEC Student Profile System{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+
+  <div class="confirm-wrap">
+    <div class="confirm-card">
+
+      <div class="confirm-card-top">
+        <span class="confirm-icon">⚠️</span>
+      </div>
+
+      <div class="confirm-card-body">
+        <h2>Delete Student Profile</h2>
+        <p>
+          You are about to permanently delete the profile of:<br>
+          <span class="confirm-name">{{ student.full_name }}</span><br>
+          <span style="font-size:0.82rem;color:#999;">{{ student.get_course_display }} · {{ student.year_level }}</span>
+        </p>
+        <p style="font-size:0.82rem;">This action <strong>cannot be undone</strong>.</p>
+
+        <div class="confirm-actions">
+          <form method="post" action="" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Delete Profile</button>
+          </form>
+          <a href="{% url 'student_detail' student.pk %}" class="btn btn-outline">Cancel</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

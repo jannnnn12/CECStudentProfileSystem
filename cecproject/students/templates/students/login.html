@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — CEC Student Profile System</title>
+  <link rel="icon" type="image/png" href="{% static 'img/images.png' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2"/>
+</head>
+<body class="login-page">
+
+  <div class="login-bg"></div>
+
+  <div class="login-container">
+
+    <!-- Logo -->
+    <div class="login-logo">
+      <img src="{% static 'img/images.png' %}" alt="CEC logo" class="login-logo-image" width="75" height="75" />
+      <h1>CEC Student Profile</h1>
+      <p>CEBU EASTERN COLLEGE</p>
+    </div>
+
+    <!-- Card -->
+    <div class="login-card">
+      <h2>Welcome back</h2>
+      <p class="sub">Sign in to access the student portal</p>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="login-message {{ message.tags }}">
+            {% if message.tags == 'error' %}
+              &#9888;
+            {% elif message.tags == 'success' %}
+              &#9989;
+            {% else %}
+              &#8505;
+            {% endif %}
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" action="">
+        {% csrf_token %}
+
+        <div class="login-group">
+          <label for="id_username">Username</label>
+          <input
+            type="text"
+            id="id_username"
+            name="username"
+            class="login-input"
+            placeholder="Enter your username"
+            autocomplete="username"
+            required
+          />
+        </div>
+
+        <div class="login-group">
+          <label for="id_password">Password</label>
+          <div class="pw-wrap">
+            <input
+              type="password"
+              id="id_password"
+              name="password"
+              class="login-input"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            />
+            <button type="button" class="pw-toggle" id="togglePw" title="Show / Hide password">
+              &#128065;
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login">Sign In &rarr;</button>
+      </form>
+    </div>
+
+    <div class="login-footer">
+      &copy; 2025 CEC Student Profile System
+    </div>
+
+  </div>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('togglePw');
+      var input  = document.getElementById('id_password');
+      if (toggle && input) {
+        toggle.addEventListener('click', function () {
+          if (input.type === 'password') {
+            input.type = 'text';
+            toggle.innerHTML = '&#128584;';
+            toggle.title = 'Hide password';
+          } else {
+            input.type = 'password';
+            toggle.innerHTML = '&#128065;';
+            toggle.title = 'Show password';
+          }
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+{% extends "students/base.html" %}
+
+{% block title %}{{ action }} — CEC Student Profile System{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+
+  <div style="margin-bottom:20px;">
+    <a href="{% url 'student_list' %}" class="btn btn-outline">← Back to Dashboard</a>
+  </div>
+
+  <div class="form-wrap">
+    <div class="form-card">
+
+      <!-- Header -->
+      <div class="form-card-header">
+        <h2>🎓 {{ action }}</h2>
+        <p>
+          {% if action == "Add Student" %}
+            Fill in the details below to register a new student profile.
+          {% else %}
+            Update the information for {{ student.full_name }}.
+          {% endif %}
+        </p>
+      </div>
+
+      <!-- Form -->
+      <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-card-body">
+
+          <!-- Name row -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+              {{ form.first_name }}
+              {% if form.first_name.errors %}
+                <ul class="errorlist">{% for e in form.first_name.errors %}<li>⚠ {{ e }}</li>{% endfor %}</ul>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+              {{ form.last_name }}
+              {% if form.last_name.errors %}
+                <ul class="errorlist">{% for e in form.last_name.errors %}<li>⚠ {{ e }}</li>{% endfor %}</ul>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Age + Year Level row -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="{{ form.age.id_for_label }}">{{ form.age.label }}</label>
+              {{ form.age }}
+              {% if form.age.errors %}
+                <ul class="errorlist">{% for e in form.age.errors %}<li>⚠ {{ e }}</li>{% endfor %}</ul>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="{{ form.year_level.id_for_label }}">{{ form.year_level.label }}</label>
+              {{ form.year_level }}
+              {% if form.year_level.errors %}
+                <ul class="errorlist">{% for e in form.year_level.errors %}<li>⚠ {{ e }}</li>{% endfor %}</ul>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Course -->
+          <div class="form-group">
+            <label for="{{ form.course.id_for_label }}">{{ form.course.label }}</label>
+            {{ form.course }}
+            {% if form.course.errors %}
+              <ul class="errorlist">{% for e in form.course.errors %}<li>⚠ {{ e }}</li>{% endfor %}</ul>
+            {% endif %}
+          </div>
+
+          <!-- Profile Picture -->
+          <div class="form-group">
+            <label for="{{ form.profile_picture.id_for_label }}">{{ form.profile_picture.label }}</label>
+
+            {% if student and student.profile_picture %}
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+                <img src="{{ student.profile_picture.url }}"
+                     alt="Current photo"
+                     style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--gold, #C9A84C);">
+                <span style="font-size:0.82rem;color:#6B7A99;">Current photo — upload a new one to replace it.</span>
+              </div>
+            {% endif %}
+
+            {{ form.profile_picture }}
+            {% if form.profile_picture.errors %}
+              <ul class="errorlist">{% for e in form.profile_picture.errors %}<li>⚠ {{ e }}</li>{% endfor %}</ul>
+            {% endif %}
+          </div>
+
+        </div><!-- /form-card-body -->
+
+        <!-- Footer Buttons -->
+        <div class="form-card-footer">
+          <button type="submit" class="btn btn-gold">
+            {% if action == "Add Student" %}🎓 Save Profile{% else %}💾 Update Profile{% endif %}
+          </button>
+          <a href="{% url 'student_list' %}" class="btn btn-outline">Cancel</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
