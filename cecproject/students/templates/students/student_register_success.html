@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registration Successful — CEC Student Profile System</title>
+  <link rel="icon" type="image/png" href="{% static 'img/images.png' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <img src="{% static 'img/images.png' %}" alt="CEC logo" class="brand-logo" height="45" width="45"/>
+        <div class="brand-text">
+          <span class="brand-name">Student Profile</span>
+          <span class="brand-sub">CEBU EASTERN COLLEGE</span>
+        </div>
+      </a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="confirm-wrap" style="margin-top: 80px;">
+      <div class="confirm-card">
+        <div class="confirm-card-top" style="background: var(--success);">
+          <span class="confirm-icon">✓</span>
+        </div>
+        <div class="confirm-card-body">
+          <h2>Registration Successful!</h2>
+          <p>
+            Welcome, <span class="confirm-name">{{ student.full_name }}</span>!<br/>
+            Your student profile has been created successfully.
+          </p>
+          <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-muted);">
+            <strong>School ID:</strong> {{ student.school_id }}<br/>
+            <strong>Course:</strong> {{ student.get_course_display }}<br/>
+            <strong>Year Level:</strong> {{ student.year_level }}
+          </p>
+          <p style="margin-top: 20px; font-size: 0.85rem; color: var(--text-muted);">
+            Your profile is now visible in the CEC Student Profile System dashboard.
+          </p>
+
+          <div class="confirm-actions">
+            <a href="{% url 'login' %}" class="btn btn-primary">
+              ← Back to Login
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

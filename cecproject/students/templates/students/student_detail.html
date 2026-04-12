@@ -23,6 +23,17 @@
         <div class="detail-hero-info">
           <div class="detail-hero-name">{{ student.full_name }}</div>
           <div class="detail-hero-course">{{ student.get_course_display }}</div>
+          <div style="margin-top: 8px;">
+            {% if student.is_active %}
+              <span style="display: inline-block; background: #E8F5E9; color: #1B5E20; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
+                ✓ Active
+              </span>
+            {% else %}
+              <span style="display: inline-block; background: #FFF3E0; color: #E65100; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
+                ⊘ Inactive
+              </span>
+            {% endif %}
+          </div>
         </div>
       </div>
 
@@ -50,10 +61,33 @@
             <div class="detail-field-value">{{ student.year_level }}</div>
           </div>
 
+          <div class="detail-field">
+            <div class="detail-field-label">School ID</div>
+            <div class="detail-field-value">{{ student.school_id }}</div>
+          </div>
+
+          <div class="detail-field">
+            <div class="detail-field-label">Email</div>
+            <div class="detail-field-value">
+              {% if student.email %}
+                <a href="mailto:{{ student.email }}" style="color: var(--navy); text-decoration: underline;">{{ student.email }}</a>
+              {% else %}
+                <span style="color: var(--text-muted);">Not provided</span>
+              {% endif %}
+            </div>
+          </div>
+
           <div class="detail-field" style="grid-column: 1 / -1;">
             <div class="detail-field-label">Course</div>
             <div class="detail-field-value">{{ student.get_course_display }}</div>
           </div>
+
+          {% if not student.is_active %}
+          <div class="detail-field" style="grid-column: 1 / -1; background: #FFF3E0; border: 1px solid #FFD54F;">
+            <div class="detail-field-label">Status Reason</div>
+            <div class="detail-field-value" style="color: #E65100;">{{ student.get_status_reason_display }}</div>
+          </div>
+          {% endif %}
 
           <div class="detail-field">
             <div class="detail-field-label">Date Added</div>
@@ -61,7 +95,7 @@
           </div>
 
           <div class="detail-field">
-            <div class="detail-field-label">Student ID</div>
+            <div class="detail-field-label">Record ID</div>
             <div class="detail-field-value">#{{ student.pk|stringformat:"04d" }}</div>
           </div>
 
@@ -70,7 +104,11 @@
         <!-- Actions -->
         <div class="detail-actions">
           <a href="{% url 'student_edit' student.pk %}" class="btn btn-gold">✎ Edit Profile</a>
-          <a href="{% url 'student_delete' student.pk %}" class="btn btn-danger">✕ Delete</a>
+          {% if student.is_active %}
+            <a href="{% url 'student_set_inactive' student.pk %}" class="btn btn-danger">⊘ Mark Inactive</a>
+          {% else %}
+            <a href="{% url 'student_set_active' student.pk %}" class="btn btn-primary">↻ Reactivate</a>
+          {% endif %}
           <a href="{% url 'student_list' %}" class="btn btn-outline">← All Students</a>
         </div>
       </div>

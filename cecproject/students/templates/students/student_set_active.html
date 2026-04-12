@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reactivate Student — CEC Student Profile System</title>
+  <link rel="icon" type="image/png" href="{% static 'img/images.png' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="{% url 'student_list' %}" class="navbar-brand">
+        <img src="{% static 'img/images.png' %}" alt="CEC logo" class="brand-logo" />
+        <div class="brand-text">
+          <span class="brand-name">Student Profile</span>
+          <span class="brand-sub">CEBU EASTERN COLLEGE</span>
+        </div>
+      </a>
+      <div class="navbar-links">
+        <a href="{% url 'student_list' %}" class="nav-link">&#127968; Back to Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="confirm-wrap">
+      <div class="confirm-card">
+        <div class="confirm-card-top" style="background: var(--success);">
+          <span class="confirm-icon">✓</span>
+        </div>
+        <div class="confirm-card-body">
+          <h2>Reactivate Student</h2>
+          <p>
+            You are about to reactivate <span class="confirm-name" style="color: var(--success);">{{ student.full_name }}</span>.
+          </p>
+          <p style="margin-top: 14px; font-size: 0.9rem; color: var(--text-muted);">
+            This student will be marked as active and visible on the dashboard.
+          </p>
+
+          <form method="post" action="">
+            {% csrf_token %}
+
+            <div class="confirm-actions" style="margin-top: 24px;">
+              <a href="{% url 'student_list' %}" class="btn btn-outline">Cancel</a>
+              <button type="submit" class="btn btn-primary">Yes, Reactivate</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

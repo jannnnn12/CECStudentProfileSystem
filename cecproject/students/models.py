@@ -17,6 +17,13 @@ COURSE_CHOICES = [
     ('BSCRIM', 'BS Criminology'),
 ]
 
+STATUS_REASON_CHOICES = [
+    ('active', 'Active'),
+    ('school_transfer', 'School Transfer'),
+    ('stopped_school', 'Stopped School'),
+    ('other', 'Other'),
+]
+
 
 class Student(models.Model):
     first_name    = models.CharField(max_length=100)
@@ -24,12 +31,16 @@ class Student(models.Model):
     age           = models.IntegerField()
     course        = models.CharField(max_length=100, choices=COURSE_CHOICES)
     year_level    = models.CharField(max_length=20,  choices=YEAR_LEVEL_CHOICES)
+    school_id     = models.CharField(max_length=50, unique=True)
+    email         = models.EmailField(blank=True, null=True)
     profile_picture = models.ImageField(
         upload_to='profile_pics/',
         blank=True,
         null=True,
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    is_active     = models.BooleanField(default=True)
+    status_reason = models.CharField(max_length=20, choices=STATUS_REASON_CHOICES, default='active', blank=True)
+    created_at    = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['last_name', 'first_name']

@@ -77,6 +77,37 @@
 
         <button type="submit" class="btn-login">Sign In &rarr;</button>
       </form>
+
+      <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+        <p style="font-size: 0.82rem; color: rgba(255,255,255,0.6); margin-bottom: 8px;">
+          New student? Create your profile
+        </p>
+        <a href="{% url 'student_register' %}" class="btn" style="
+          width: 100%;
+          background: rgba(255,255,255,0.1);
+          color: rgba(255,255,255,0.9);
+          border: 1px solid rgba(255,255,255,0.2);
+          font-weight: 500;
+          padding: 10px;
+          text-decoration: none;
+          display: block;
+          text-align: center;
+          border-radius: 8px;
+          transition: all 0.15s;
+        " onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+          Register Here →
+        </a>
+      </div>
+
+      <!-- QR Code Registration Option -->
+      <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+        <p style="font-size: 0.82rem; color: rgba(255,255,255,0.6); margin-bottom: 12px;">
+          Or scan to register using QR code
+        </p>
+        <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; display: inline-block;">
+          <img src="{{ qr_code_url }}" alt="Scan to register" width="150" height="150" style="border-radius: 4px; border: 2px solid rgba(255,255,255,0.2);" />
+        </div>
+      </div>
     </div>
 
     <div class="login-footer">

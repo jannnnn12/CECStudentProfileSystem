@@ -32,7 +32,7 @@
 
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; scroll-behavior: smooth; }
+html { font-size: 16px; scroll-behavior: smooth; height: 100%; overflow-y: auto; }
 
 body {
   font-family: 'Outfit', sans-serif;
@@ -40,6 +40,7 @@ body {
   color: var(--text);
   line-height: 1.6;
   min-height: 100vh;
+  height: auto;
 }
 
 /* ── Navbar ── */
@@ -916,11 +917,13 @@ body {
 body.login-page {
   background: var(--navy);
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   min-height: 100vh;
-  padding: 32px 24px 40px;
+  height: auto;
+  padding: 24px 24px 60px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Full-screen background image overlay */
@@ -1011,9 +1014,11 @@ body.login-page {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 18px;
-  padding: 36px 36px 28px;
+  padding: 28px 28px 24px;
   backdrop-filter: blur(12px);
   box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  max-height: none;
+  overflow: visible;
 }
 
 .login-card h2 {

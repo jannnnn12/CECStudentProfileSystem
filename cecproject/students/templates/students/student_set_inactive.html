@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mark Inactive — CEC Student Profile System</title>
+  <link rel="icon" type="image/png" href="{% static 'img/images.png' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="{% url 'student_list' %}" class="navbar-brand">
+        <img src="{% static 'img/images.png' %}" alt="CEC logo" class="brand-logo" />
+        <div class="brand-text">
+          <span class="brand-name">Student Profile</span>
+          <span class="brand-sub">CEBU EASTERN COLLEGE</span>
+        </div>
+      </a>
+      <div class="navbar-links">
+        <a href="{% url 'student_list' %}" class="nav-link">&#127968; Back to Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="confirm-wrap">
+      <div class="confirm-card">
+        <div class="confirm-card-top" style="background: var(--danger);">
+          <span class="confirm-icon">⚠</span>
+        </div>
+        <div class="confirm-card-body">
+          <h2>Mark Student as Inactive</h2>
+          <p>
+            You are marking <span class="confirm-name">{{ student.full_name }}</span> as inactive.
+          </p>
+          <p style="margin-top: 16px; font-size: 0.9rem; color: var(--text-muted);">
+            Please select the reason for inactivating this student:
+          </p>
+
+          <form method="post" action="">
+            {% csrf_token %}
+
+            <div class="form-group" style="margin-top: 20px; text-align: left;">
+              {% for value, label in status_reasons %}
+                {% if value != 'active' %}
+                  <div style="margin-bottom: 12px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal; color: var(--text);">
+                      <input type="radio" name="status_reason" value="{{ value }}" required 
+                             style="margin-right: 8px; cursor: pointer;" />
+                      {{ label }}
+                    </label>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            <div class="confirm-actions" style="margin-top: 24px;">
+              <a href="{% url 'student_list' %}" class="btn btn-outline">Cancel</a>
+              <button type="submit" class="btn btn-danger">Mark Inactive</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

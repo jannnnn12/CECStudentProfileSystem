@@ -1,7 +1,7 @@
 # CECStudentProfileSystem — Django Student Profile Manager
 
 A clean, modern Django web application for managing student profiles at the
-College of Engineering & Computing (CEC).
+Cebu Eastern College (CEC).
 
 ---
 
