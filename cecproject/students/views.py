@@ -63,7 +63,7 @@ def student_register(request):
             student.is_active = True
             student.status_reason = 'active'
             student.save()
-            messages.success(request, f'Welcome {student.full_name()}! Your profile has been created successfully. You can now see it in the student dashboard.')
+            messages.success(request, f'Welcome {student.full_name()}! Your profile has been created successfully. Admin can now see it in the student dashboard.')
             return redirect('student_register_success', pk=student.pk)
     else:
         form = StudentRegistrationForm()
