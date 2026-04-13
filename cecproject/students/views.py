@@ -68,9 +68,14 @@ def student_register(request):
     else:
         form = StudentRegistrationForm()
     
+    registration_url = get_registration_url(request)
+    qr_code_url = f"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={registration_url}"
+
     context = {
         'form': form,
         'action': 'Student Registration',
+        'registration_url': registration_url,
+        'qr_code_url': qr_code_url,
     }
     return render(request, 'students/student_register.html', context)
 

@@ -1,53 +1,40 @@
-# CECStudentProfileSystem — Django Student Profile Manager
+# CECStudentProfileSystem
 
-A clean, modern Django web application for managing student profiles at the
-Cebu Eastern College (CEC).
+Django-based student profile management system for Cebu Eastern College (CEC).
 
----
+## Requirements
+
+- Python 3.10+ (recommended)
+- pip
 
 ## Project Structure
 
-```
+```text
 cecproject/
 ├── manage.py
 ├── requirements.txt
-│
-├── cecproject/               ← Project config
+├── db.sqlite3
+├── cecproject/
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-│
-├── students/                 ← Main app
-│   ├── models.py             ← Student model
-│   ├── views.py              ← All function-based views
-│   ├── forms.py              ← StudentForm
-│   ├── urls.py               ← URL routes
-│   ├── admin.py              ← Django admin config
-│   │
-│   ├── templates/students/
-│   │   ├── base.html                  ← Shared layout + navbar
-│   │   ├── login.html                 ← Login page (full-screen bg)
-│   │   ├── student_list.html          ← Dashboard / card grid
-│   │   ├── student_detail.html        ← Single student profile
-│   │   ├── student_form.html          ← Add & Edit form
-│   │   └── student_confirm_delete.html
-│   │
-│   └── static/css/
-│       └── style.css                  ← Full design system
-│
-└── media/                    ← Created after first image upload
-    └── profile_pics/
+├── static/
+│   └── css/style.css
+└── students/
+    ├── admin.py
+    ├── forms.py
+    ├── models.py
+    ├── urls.py
+    ├── views.py
+    └── templates/students/
 ```
 
----
+## Local Setup (Windows PowerShell)
 
-## Quick Start (Windows)
-
-Open VS Code, navigate to the `cecproject` folder in the terminal, then run:
-
-```cmd
+```powershell
+cd "cecproject"
 python -m venv venv
-venv\Scripts\activate.bat
+.\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 python manage.py makemigrations students
 python manage.py migrate
@@ -55,51 +42,36 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-## Quick Start (macOS / Linux)
+Open:
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python manage.py makemigrations students
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver
+- `http://127.0.0.1:8000/login/`
+- `http://127.0.0.1:8000/` (requires login)
+
+If PowerShell blocks activation:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ```
 
----
+## Main URLs
 
-## Pages & URLs
-
-| URL                          | Page                  | Auth Required |
-|------------------------------|-----------------------|---------------|
-| `/login/`                    | Login page            | No            |
-| `/`                          | Dashboard (card list) | Yes           |
-| `/student/add/`              | Add student           | Yes           |
-| `/student/<id>/`             | Student detail        | Yes           |
-| `/student/<id>/edit/`        | Edit student          | Yes           |
-| `/student/<id>/delete/`      | Delete confirm        | Yes           |
-| `/admin/`                    | Django admin panel    | Superuser     |
-
----
-
-## Student Model Fields
-
-| Field           | Type         | Notes                        |
-|-----------------|--------------|------------------------------|
-| first_name      | CharField    | Max 100 chars                |
-| last_name       | CharField    | Max 100 chars                |
-| age             | IntegerField | 15–60                        |
-| course          | CharField    | Dropdown choices             |
-| year_level      | CharField    | 1st–5th Year dropdown        |
-| profile_picture | ImageField   | Uploaded to media/profile_pics/ |
-| created_at      | DateTimeField| Auto-set on creation         |
-
----
+| URL | Description | Auth Required |
+|---|---|---|
+| `/login/` | Admin login page | No |
+| `/logout/` | Logout endpoint | Yes |
+| `/register/` | Public student registration page | No |
+| `/register/success/<id>/` | Registration success page | No |
+| `/` | Student dashboard/list | Yes |
+| `/student/add/` | Add student profile (admin side) | Yes |
+| `/student/<id>/` | Student details | Yes |
+| `/student/<id>/edit/` | Edit student profile | Yes |
+| `/student/<id>/inactive/` | Mark student inactive | Yes |
+| `/student/<id>/active/` | Reactivate student | Yes |
+| `/admin/` | Django admin | Superuser |
 
 ## Notes
 
-- **Pillow** is required for ImageField (profile picture uploads).
-- Images are served from the `/media/` URL in development mode.
-- The login page uses a full-screen geometric CSS background (no external image file needed).
-- Show/Hide password toggle uses a small inline JavaScript snippet on the login page only.
+- The app uses SQLite by default (`db.sqlite3`).
+- Static files are loaded from `cecproject/static/`.
+- Uploaded files are served from `/media/` in development mode.
+- Pillow is required for profile image uploads.

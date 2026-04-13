@@ -24,7 +24,7 @@
     <!-- Card -->
     <div class="login-card">
       <h2>Create Your Profile</h2>
-      <p class="sub">Fill in your details to register as a student</p>
+      <p class="sub">Choose how you want to register</p>
 
       {% if messages %}
         {% for message in messages %}
@@ -41,7 +41,32 @@
         {% endfor %}
       {% endif %}
 
-      <form method="post" enctype="multipart/form-data" action="">
+      <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+        <button type="button" id="showFormBtn" class="btn-login" style="flex: 1; margin-top: 0;">Register Here</button>
+        <button type="button" id="showQrBtn" class="btn" style="
+          flex: 1;
+          background: rgba(255,255,255,0.1);
+          color: rgba(255,255,255,0.9);
+          border: 1px solid rgba(255,255,255,0.2);
+          font-weight: 500;
+          padding: 12px;
+          text-align: center;
+          border-radius: 8px;
+          transition: all 0.15s;
+        ">Scan QR to Phone</button>
+      </div>
+
+      <div id="qrPanel" style="display: none; margin-bottom: 16px; text-align: center; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 16px;">
+        <p style="font-size: 0.85rem; color: rgba(255,255,255,0.78); margin-bottom: 12px;">
+          Scan this QR code using your phone camera to open the registration page.
+        </p>
+        <img src="{{ qr_code_url }}" alt="Scan to register" width="170" height="170" style="border-radius: 8px; border: 2px solid rgba(255,255,255,0.2);" />
+        <p style="font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 12px;">
+          If scan is not available, open this link: <a href="{{ registration_url }}" style="color: var(--gold-light);">Registration Link</a>
+        </p>
+      </div>
+
+      <form id="registerFormPanel" method="post" enctype="multipart/form-data" action="">
         {% csrf_token %}
 
         <div class="login-group">
@@ -133,5 +158,37 @@
 
   </div>
 
+<script>
+  (function () {
+    var showFormBtn = document.getElementById('showFormBtn');
+    var showQrBtn = document.getElementById('showQrBtn');
+    var formPanel = document.getElementById('registerFormPanel');
+    var qrPanel = document.getElementById('qrPanel');
+
+    function activateForm() {
+      formPanel.style.display = 'block';
+      qrPanel.style.display = 'none';
+      showFormBtn.style.background = 'linear-gradient(135deg, var(--gold), var(--gold-light))';
+      showFormBtn.style.color = 'var(--navy)';
+      showQrBtn.style.background = 'rgba(255,255,255,0.1)';
+      showQrBtn.style.color = 'rgba(255,255,255,0.9)';
+    }
+
+    function activateQr() {
+      formPanel.style.display = 'none';
+      qrPanel.style.display = 'block';
+      showQrBtn.style.background = 'linear-gradient(135deg, var(--gold), var(--gold-light))';
+      showQrBtn.style.color = 'var(--navy)';
+      showFormBtn.style.background = 'rgba(255,255,255,0.1)';
+      showFormBtn.style.color = 'rgba(255,255,255,0.9)';
+    }
+
+    if (showFormBtn && showQrBtn && formPanel && qrPanel) {
+      showFormBtn.addEventListener('click', activateForm);
+      showQrBtn.addEventListener('click', activateQr);
+      activateForm();
+    }
+  })();
+</script>
 </body>
 </html>
