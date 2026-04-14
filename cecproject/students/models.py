@@ -6,7 +6,7 @@ YEAR_LEVEL_CHOICES = [
     ('2nd Year', '2nd Year'),
     ('3rd Year', '3rd Year'),
     ('4th Year', '4th Year'),
-    ('5th Year', '5th Year'),
+    ('Irregular Student', 'Irregular Student'),
 ]
 
 COURSE_CHOICES = [
@@ -19,6 +19,7 @@ COURSE_CHOICES = [
 
 STATUS_REASON_CHOICES = [
     ('active', 'Active'),
+    ('pending_approval', 'Pending Approval'),
     ('school_transfer', 'School Transfer'),
     ('stopped_school', 'Stopped School'),
     ('other', 'Other'),
@@ -40,6 +41,7 @@ class Student(models.Model):
     )
     is_active     = models.BooleanField(default=True)
     status_reason = models.CharField(max_length=20, choices=STATUS_REASON_CHOICES, default='active', blank=True)
+    status_note   = models.CharField(max_length=255, blank=True)
     created_at    = models.DateTimeField(auto_now_add=True)
 
     class Meta:

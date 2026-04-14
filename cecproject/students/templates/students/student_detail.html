@@ -29,9 +29,15 @@
                 ✓ Active
               </span>
             {% else %}
-              <span style="display: inline-block; background: #FFF3E0; color: #E65100; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
-                ⊘ Inactive
-              </span>
+              {% if student.status_reason == 'pending_approval' %}
+                <span style="display: inline-block; background: #E3F2FD; color: #0D47A1; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
+                  ⏳ Pending Approval
+                </span>
+              {% else %}
+                <span style="display: inline-block; background: #FFF3E0; color: #E65100; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
+                  ⊘ Inactive
+                </span>
+              {% endif %}
             {% endif %}
           </div>
         </div>
@@ -85,7 +91,12 @@
           {% if not student.is_active %}
           <div class="detail-field" style="grid-column: 1 / -1; background: #FFF3E0; border: 1px solid #FFD54F;">
             <div class="detail-field-label">Status Reason</div>
-            <div class="detail-field-value" style="color: #E65100;">{{ student.get_status_reason_display }}</div>
+            <div class="detail-field-value" style="color: #E65100;">
+              {{ student.get_status_reason_display }}
+              {% if student.status_reason == 'other' and student.status_note %}
+                — {{ student.status_note }}
+              {% endif %}
+            </div>
           </div>
           {% endif %}
 
@@ -107,7 +118,9 @@
           {% if student.is_active %}
             <a href="{% url 'student_set_inactive' student.pk %}" class="btn btn-danger">⊘ Mark Inactive</a>
           {% else %}
-            <a href="{% url 'student_set_active' student.pk %}" class="btn btn-primary">↻ Reactivate</a>
+            <a href="{% url 'student_set_active' student.pk %}" class="btn btn-primary">
+              {% if student.status_reason == 'pending_approval' %}✓ Approve Student{% else %}↻ Reactivate{% endif %}
+            </a>
           {% endif %}
           <a href="{% url 'student_list' %}" class="btn btn-outline">← All Students</a>
         </div>

@@ -60,10 +60,11 @@ def student_register(request):
         form = StudentRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             student = form.save(commit=False)
-            student.is_active = True
-            student.status_reason = 'active'
+            student.is_active = False
+            student.status_reason = 'pending_approval'
+            student.status_note = ''
             student.save()
-            messages.success(request, f'Welcome {student.full_name()}! Your profile has been created successfully. Admin can now see it in the student dashboard.')
+            messages.success(request, f'Welcome {student.full_name()}! Your profile has been submitted and is now pending admin approval.')
             return redirect('student_register_success', pk=student.pk)
     else:
         form = StudentRegistrationForm()
@@ -92,12 +93,21 @@ def student_register_success(request, pk):
 def student_list(request):
     """Dashboard — list all students as cards with course filtering and statistics."""
     course_filter = request.GET.get('course', '').strip()
+    status_filter = request.GET.get('status', '').strip()
     query = request.GET.get('q', '').strip()
     students = Student.objects.all()
 
     # Apply course filter
     if course_filter:
         students = students.filter(course=course_filter)
+
+    # Apply status filter
+    if status_filter == 'active':
+        students = students.filter(is_active=True)
+    elif status_filter == 'pending':
+        students = students.filter(is_active=False, status_reason='pending_approval')
+    elif status_filter == 'inactive':
+        students = students.filter(is_active=False).exclude(status_reason='pending_approval')
 
     # Apply search filter
     if query:
@@ -112,9 +122,11 @@ def student_list(request):
         'students': students,
         'query': query,
         'course_filter': course_filter,
+        'status_filter': status_filter,
         'total': Student.objects.count(),
         'active_count': Student.objects.filter(is_active=True).count(),
-        'inactive_count': Student.objects.filter(is_active=False).count(),
+        'inactive_count': Student.objects.filter(is_active=False).exclude(status_reason='pending_approval').count(),
+        'pending_count': Student.objects.filter(is_active=False, status_reason='pending_approval').count(),
         'course_choices': COURSE_CHOICES,
         'course_stats': course_stats,
     }
@@ -173,10 +185,19 @@ def student_set_inactive(request, pk):
     
     if request.method == 'POST':
         reason = request.POST.get('status_reason', 'other')
+        custom_reason = request.POST.get('status_note', '').strip()
+        if reason == 'other' and not custom_reason:
+            messages.error(request, 'Please provide a custom reason when selecting Other.')
+            return render(request, 'students/student_set_inactive.html', {
+                'student': student,
+                'status_reasons': STATUS_REASON_CHOICES,
+            })
         student.is_active = False
         student.status_reason = reason
+        student.status_note = custom_reason if reason == 'other' else ''
         student.save()
-        messages.success(request, f'Profile for {student.full_name()} marked as inactive ({dict(STATUS_REASON_CHOICES).get(reason, reason)}).')
+        reason_label = custom_reason if reason == 'other' else dict(STATUS_REASON_CHOICES).get(reason, reason)
+        messages.success(request, f'Profile for {student.full_name()} marked as inactive ({reason_label}).')
         return redirect('student_list')
     
     return render(request, 'students/student_set_inactive.html', {
@@ -191,10 +212,15 @@ def student_set_active(request, pk):
     student = get_object_or_404(Student, pk=pk)
     
     if request.method == 'POST':
+        was_pending = (student.status_reason == 'pending_approval')
         student.is_active = True
         student.status_reason = 'active'
+        student.status_note = ''
         student.save()
-        messages.success(request, f'Profile for {student.full_name()} marked as active.')
+        if was_pending:
+            messages.success(request, f'Pending profile for {student.full_name()} has been approved and marked as active.')
+        else:
+            messages.success(request, f'Profile for {student.full_name()} marked as active.')
         return redirect('student_list')
     
     return render(request, 'students/student_set_active.html', {'student': student})

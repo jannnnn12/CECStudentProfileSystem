@@ -41,6 +41,12 @@
         {% endfor %}
       {% endif %}
 
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+          <div class="login-message error">{{ error }}</div>
+        {% endfor %}
+      {% endif %}
+
       <div style="display: flex; gap: 10px; margin-bottom: 16px;">
         <button type="button" id="showFormBtn" class="btn-login" style="flex: 1; margin-top: 0;">Register Here</button>
         <button type="button" id="showQrBtn" class="btn" style="

@@ -18,6 +18,7 @@
   <div class="stats-strip">
     <div class="stat-pill">Total: <strong>{{ total }}</strong></div>
     <div class="stat-pill">Active: <strong>{{ active_count }}</strong></div>
+    <div class="stat-pill">Pending: <strong>{{ pending_count }}</strong></div>
     <div class="stat-pill">Inactive: <strong>{{ inactive_count }}</strong></div>
   </div>
 
@@ -35,10 +36,8 @@
 
   <!-- Filters & Search -->
   <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
-    
-    <!-- Course Filter -->
-    <form method="get" action="" style="display: flex; gap: 8px; flex: 1; min-width: 200px;">
-      <select name="course" class="search-input" style="flex: 1; max-width: none;" onchange="this.form.submit()">
+    <form method="get" action="" style="display: flex; gap: 8px; flex: 1; min-width: 300px; flex-wrap: wrap;">
+      <select name="course" class="search-input" style="flex: 1; min-width: 180px; max-width: none;">
         <option value="">All Courses</option>
         {% for code, name in course_choices %}
           <option value="{{ code }}" {% if course_filter == code %}selected{% endif %}>
@@ -46,20 +45,22 @@
           </option>
         {% endfor %}
       </select>
-    </form>
-
-    <!-- Search Bar -->
-    <form method="get" action="" style="display: flex; gap: 8px; flex: 1; min-width: 200px;">
+      <select name="status" class="search-input" style="flex: 1; min-width: 160px; max-width: none;">
+        <option value="">All Status</option>
+        <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active</option>
+        <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending Approval</option>
+        <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>Inactive</option>
+      </select>
       <input
         type="text"
         name="q"
         value="{{ query }}"
         class="search-input"
         placeholder="Search by name or School ID…"
-        style="flex: 1;"
+        style="flex: 2; min-width: 220px;"
       />
       <button type="submit" class="btn btn-primary">Search</button>
-      {% if query or course_filter %}
+      {% if query or course_filter or status_filter %}
         <a href="{% url 'student_list' %}" class="btn btn-outline">✕ Clear</a>
       {% endif %}
     </form>
@@ -88,9 +89,15 @@
           <span class="badge badge-year">{{ student.year_level }}</span>
           <span class="badge badge-age">ID: {{ student.school_id }}</span>
           {% if not student.is_active %}
-          <span class="badge" style="background: #FFF3E0; color: #E65100; border: 1px solid #FFD54F;">
-            Inactive
-          </span>
+            {% if student.status_reason == 'pending_approval' %}
+            <span class="badge" style="background: #E3F2FD; color: #0D47A1; border: 1px solid #90CAF9;">
+              Pending Approval
+            </span>
+            {% else %}
+            <span class="badge" style="background: #FFF3E0; color: #E65100; border: 1px solid #FFD54F;">
+              Inactive
+            </span>
+            {% endif %}
           {% endif %}
         </div>
       </div>
@@ -102,7 +109,9 @@
         {% if student.is_active %}
           <a href="{% url 'student_set_inactive' student.pk %}" class="btn-delete">⊘ Inactive</a>
         {% else %}
-          <a href="{% url 'student_set_active' student.pk %}" class="btn-edit" style="background: #E8F5E9; color: #1B5E20; border-right: 1px solid var(--border);">↻ Reactivate</a>
+          <a href="{% url 'student_set_active' student.pk %}" class="btn-edit" style="background: #E8F5E9; color: #1B5E20; border-right: 1px solid var(--border);">
+            {% if student.status_reason == 'pending_approval' %}✓ Approve{% else %}↻ Reactivate{% endif %}
+          </a>
         {% endif %}
       </div>
 

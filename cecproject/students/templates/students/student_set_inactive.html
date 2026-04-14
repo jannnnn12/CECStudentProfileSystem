@@ -33,6 +33,13 @@
         </div>
         <div class="confirm-card-body">
           <h2>Mark Student as Inactive</h2>
+          {% if messages %}
+            {% for message in messages %}
+              <div class="login-message {{ message.tags }}" style="margin-top: 12px; text-align: left;">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
           <p>
             You are marking <span class="confirm-name">{{ student.full_name }}</span> as inactive.
           </p>
@@ -45,7 +52,7 @@
 
             <div class="form-group" style="margin-top: 20px; text-align: left;">
               {% for value, label in status_reasons %}
-                {% if value != 'active' %}
+                {% if value != 'active' and value != 'pending_approval' %}
                   <div style="margin-bottom: 12px;">
                     <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal; color: var(--text);">
                       <input type="radio" name="status_reason" value="{{ value }}" required 
@@ -55,6 +62,20 @@
                   </div>
                 {% endif %}
               {% endfor %}
+            </div>
+
+            <div id="otherReasonWrap" style="display:none; margin-top: 12px; text-align:left;">
+              <label for="id_status_note" style="display:block; font-size:0.8rem; color: var(--text-muted); margin-bottom:6px;">
+                Please type the custom reason
+              </label>
+              <input
+                type="text"
+                id="id_status_note"
+                name="status_note"
+                class="form-input"
+                placeholder="Type reason here..."
+                maxlength="255"
+              />
             </div>
 
             <div class="confirm-actions" style="margin-top: 24px;">
@@ -67,5 +88,29 @@
     </div>
   </div>
 
+  <script>
+    (function () {
+      var reasonInputs = document.querySelectorAll('input[name="status_reason"]');
+      var otherWrap = document.getElementById('otherReasonWrap');
+      var otherInput = document.getElementById('id_status_note');
+
+      function syncOtherInput() {
+        var selected = document.querySelector('input[name="status_reason"]:checked');
+        if (selected && selected.value === 'other') {
+          otherWrap.style.display = 'block';
+          otherInput.required = true;
+        } else {
+          otherWrap.style.display = 'none';
+          otherInput.required = false;
+          otherInput.value = '';
+        }
+      }
+
+      reasonInputs.forEach(function (input) {
+        input.addEventListener('change', syncOtherInput);
+      });
+      syncOtherInput();
+    })();
+  </script>
 </body>
 </html>
